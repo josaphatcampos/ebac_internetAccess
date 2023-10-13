@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 class UserController {
   User user = User(id: 0, name: "", email: "", phone: "", website: "");
   ValueNotifier<bool> isLoading = ValueNotifier<bool>(true);
+  ValueNotifier<double> size = ValueNotifier<double>(20);
 
   UserController() {
     init();
@@ -14,6 +15,7 @@ class UserController {
 
   void dispose() {
     isLoading.dispose();
+    size.dispose();
   }
 
   void init() async {
@@ -26,5 +28,12 @@ class UserController {
     var response = await http.get(url);
     User user = User.fromJson(jsonDecode(response.body));
     return user;
+  }
+
+  pulse(){
+    Future.delayed(const Duration(seconds: 2), () {
+      size.value = size.value == 20 ? 50 : 20;
+      pulse();
+    },);
   }
 }

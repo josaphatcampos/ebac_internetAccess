@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -13,6 +14,13 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   final UserController _controller = UserController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller.pulse();
+  }
 
   @override
   void dispose() {
@@ -128,6 +136,27 @@ class _UserPageState extends State<UserPage> {
               )
             ],
           ),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ValueListenableBuilder(
+                  valueListenable: _controller.size,
+                  builder:(context, value, child) {
+                    return AnimatedContainer(
+                        duration: const Duration(seconds: 2),
+                       height: _controller.size.value,
+                       width: _controller.size.value,
+                       decoration: const BoxDecoration(
+                         borderRadius: BorderRadius.all(Radius.circular(30)),
+                         color: Colors.red
+                       ),
+                    );
+                  },
+              ),
+            ],
+          ),
+
           ValueListenableBuilder(
             valueListenable: _controller.isLoading,
             builder: (context, value, child) {
